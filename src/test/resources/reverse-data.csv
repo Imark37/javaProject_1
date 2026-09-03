@@ -1,0 +1,5 @@
+input,expected
+"A,B,C,D","D,C,B,A"
+"1,2,3","3,2,1"
+"X,Y,Z","Z,Y,X"
+"One,Two,Three","Three,Two,One"
