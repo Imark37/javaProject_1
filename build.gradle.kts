@@ -17,4 +17,21 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // Для вывода System.out.println() в консоль (для себя)
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+// 1. запускаем все тесты
+tasks.register("runTests") {
+    dependsOn("test")
+}
+
+// 2. выводим "Test run is over" после завершения runTests
+tasks.register("printResult") {
+    dependsOn("runTests")
+    doLast {
+        println("Test run is over")
+    }
 }
