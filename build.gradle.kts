@@ -19,6 +19,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.assertj:assertj-core:3.25.3")
 }
 
 tasks.test {
@@ -28,34 +29,8 @@ tasks.test {
         showStandardStreams = true
     }
 }
-/*
-// --- ЗАДАЧА 1 (запускаем тесты с тегом task1)
-tasks.register<Test>("runTask1") {
-    group = "other" // появится в списке задач под этим разделом
-    useJUnitPlatform {
-        includeTags("task1")
-    }
-}
 
-// --- ЗАДАЧА 2 (запускаем тесты с тегом task2)
-tasks.register<Test>("runTask2") {
-    group = "other"
-    useJUnitPlatform {
-        includeTags("task2")
-    }
-}
-*/
-
-//**
-// Я не совсем понял, почему вариант из лекции (описан выше) по тегам не работал. При запуске не находил тесты
-// При запуске через -info получал (NO-SOURCE).
-// Пришлось обратиться к ИИ,там получил ответ, что Gradle в этой конкретной точке не видит контейнер SourceSetContainer.
-// Чтобы исправить это, нужно явно обернуть задачи в блок, который дождется применения плагина Java.
-// Но все таки не очень понимаю, почему так работает.
-// **//
-
-plugins.withType<JavaPlugin> {
-    val testSource = extensions.getByType<SourceSetContainer>()["test"]
+    val testSource = sourceSets["test"]
 
     // --- ЗАДАЧА 1
     tasks.register<Test>("runTask1") {
@@ -88,7 +63,19 @@ plugins.withType<JavaPlugin> {
             showStandardStreams = true
         }
     }
-}
+
+    // --- Запускаем только NumberUtilsAssertionsTest
+    tasks.register<Test>("runAssertions") {
+        group = "other"
+        testClassesDirs = tasks.test.get().testClassesDirs
+        classpath = tasks.test.get().classpath
+        outputs.upToDateWhen { false }
+        useJUnitPlatform { includeTags("assertions") }
+        testLogging {
+            showStandardStreams = true
+            events("passed", "skipped", "failed")
+        }
+    }
 
 
 // Запускаем runTask2 и выводим "Test run is over"
