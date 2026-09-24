@@ -1,3 +1,11 @@
 input,expected
+"Bug",true
+"bug",true
+"BUG",true
 "Hello,Bug,World",true
 "Hello,Fix,Debug",false
+"Bug,Fix,Debug",true
+"Test,Test,Test",false
+"bUg",true
+"Debug",false
+"Buy",false

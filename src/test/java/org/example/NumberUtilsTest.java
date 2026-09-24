@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-class NumberUtilsTest {
+public class NumberUtilsTest {
 
     private static final Random random = new Random();
 
@@ -71,77 +72,90 @@ class NumberUtilsTest {
         return random.ints(10, 0, 101);
     }
 
-    // ------------------Задание 2 (12 методов)
 
-    // @Test (4 метода)
+    // ЗАДАНИЕ 2 + ассерты (12 методов, тег task2)
 
-    @Test
+    @RepeatedTest(10)
     @Tag("task2")
     void testIsEven() {
         int number = random.nextInt(1, 101);
         boolean expected = (number % 2 == 0);
         boolean actual = NumberUtils.isEven(number);
-        printResult("isEven(" + number + ")", expected, actual);
+
+        assertThat(actual)
+                .as("isEven(%d): ожидалось %s", number, expected)
+                .isEqualTo(expected);
     }
 
-    @Test
+    @RepeatedTest(10)
     @Tag("task2")
     void testIsPositive() {
         int number = random.nextInt(-100, 101);
         boolean expected = (number >= 0);
         boolean actual = NumberUtils.isPositive(number);
-        printResult("isPositive(" + number + ")", expected, actual);
+
+        assertThat(actual)
+                .as("isPositive(%d): ожидалось %s", number, expected)
+                .isEqualTo(expected);
     }
 
-    @Test
+    @RepeatedTest(10)
     @Tag("task2")
     void testSumToN() {
         int n = random.nextInt(0, 21);
         int expected = 0;
-        for (int i = 1; i <= n; i++) {
-            expected += i;
-        }
+        for (int i = 1; i <= n; i++) expected += i;
         int actual = NumberUtils.sumToN(n);
-        printResult("sumToN(" + n + ")", expected, actual);
+
+        assertThat(actual)
+                .as("sumToN(%d): ожидалось %d", n, expected)
+                .isEqualTo(expected);
     }
 
-    @Test
+    @RepeatedTest(10)
     @Tag("task2")
     void testGetEvenInRange() {
         int start = random.nextInt(-10, 11);
         int end = start + random.nextInt(1, 10);
-        StringBuilder expectedBuilder = new StringBuilder();
+
+        StringBuilder sb = new StringBuilder();
         for (int i = start; i <= end; i++) {
             if (i % 2 == 0) {
-                if (expectedBuilder.length() > 0) {
-                    expectedBuilder.append(" ");
-                }
-                expectedBuilder.append(i);
+                if (sb.length() > 0) sb.append(" ");
+                sb.append(i);
             }
         }
-        String expected = expectedBuilder.toString();
+        String expected = sb.toString();
         String actual = NumberUtils.getEvenInRange(start, end);
-        printResult("getEvenInRange(" + start + ", " + end + ")", expected, actual);
+
+        assertThat(actual)
+                .as("getEvenInRange(%d, %d): ожидалось '%s'", start, end, expected)
+                .isEqualTo(expected);
     }
 
-    // @RepeatedTest (4 метода)
 
-    @RepeatedTest(20)
+    @RepeatedTest(10)
     @Tag("task2")
     void testCheckAccess() {
         int age = random.nextInt(0, 100);
         String expected = (age > 18) ? "Allowed" : "Denied";
         String actual = NumberUtils.checkAccess(age);
-        printResult("checkAccess(" + age + ")", expected, actual);
+
+        assertThat(actual)
+                .as("checkAccess(%d): ожидалось '%s'", age, expected)
+                .isEqualTo(expected);
     }
 
-    @RepeatedTest(20)
+    @RepeatedTest(10)
     @Tag("task2")
     void testGetGrade() {
         int score = random.nextInt(0, 101);
         String expected = getExpectedGrade(score);
         String actual = NumberUtils.getGrade(score);
-        printResult("getGrade(" + score + ")", expected, actual);
+
+        assertThat(actual)
+                .as("getGrade(%d): ожидалось '%s'", score, expected)
+                .isEqualTo(expected);
     }
 
     @RepeatedTest(10)
@@ -150,7 +164,10 @@ class NumberUtilsTest {
         int[] arr = generateRandomArray(10);
         int expected = findExpectedMax(arr);
         int actual = NumberUtils.findMax(arr);
-        printResult("findMax(" + Arrays.toString(arr) + ")", expected, actual);
+
+        assertThat(actual)
+                .as("findMax(%s): ожидалось %d", Arrays.toString(arr), expected)
+                .isEqualTo(expected);
     }
 
     @RepeatedTest(10)
@@ -159,17 +176,23 @@ class NumberUtilsTest {
         List<Integer> list = generateRandomList(10);
         double expected = calculateExpectedAverage(list);
         double actual = NumberUtils.calcAverage(list);
-        printResult("calcAverage(" + list + ")", expected, actual);
+
+        assertThat(actual)
+                .as("calcAverage(%s): ожидалось %f", list, expected)
+                .isEqualTo(expected);
     }
 
-    // @ParameterizedTest (4 метода)
+
 
     @ParameterizedTest
     @Tag("task2")
     @CsvFileSource(resources = "/test-data.csv", numLinesToSkip = 1)
     void testBlastOff(int start, String expected) {
         String actual = NumberUtils.blastOff(start);
-        printResult("blastOff(" + start + ")", expected, actual);
+
+        assertThat(actual)
+                .as("blastOff(%d): ожидалось '%s'", start, expected)
+                .isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -178,7 +201,10 @@ class NumberUtilsTest {
     void testHasBug(String input, boolean expected) {
         String[] messages = input.split(",");
         boolean actual = NumberUtils.hasBug(messages);
-        printResult("hasBug(" + input + ")", expected, actual);
+
+        assertThat(actual)
+                .as("hasBug(%s): ожидалось %s", input, expected)
+                .isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -188,7 +214,10 @@ class NumberUtilsTest {
         String[] inputArray = input.split(",");
         String[] expectedArray = expected.split(",");
         String[] actual = NumberUtils.reverse(inputArray);
-        printResult("reverse(" + input + ")", expectedArray, actual);
+
+        assertThat(actual)
+                .as("reverse(%s): ожидалось %s", input, expected)
+                .containsExactly(expectedArray);
     }
 
     @ParameterizedTest
@@ -196,7 +225,10 @@ class NumberUtilsTest {
     @MethodSource("removeSpecificNameData")
     void testRemoveSpecificName(List<String> input, String nameToRemove, List<String> expected) {
         List<String> actual = NumberUtils.removeSpecificName(input, nameToRemove);
-        printResult("removeSpecificName(" + input + ", " + nameToRemove + ")", expected, actual);
+
+        assertThat(actual)
+                .as("removeSpecificName(%s, '%s'): ожидалось %s", input, nameToRemove, expected)
+                .containsExactlyElementsOf(expected);
     }
 
     //Методы-источники данных
@@ -206,7 +238,13 @@ class NumberUtilsTest {
                 Arguments.of(Arrays.asList("Alice", "Bob", "Alice"), "Alice", Arrays.asList("Bob")),
                 Arguments.of(Arrays.asList("John", "Jane", "John"), "John", Arrays.asList("Jane")),
                 Arguments.of(Arrays.asList("One", "Two", "Three"), "Four", Arrays.asList("One", "Two", "Three")),
-                Arguments.of(new ArrayList<>(), "Any", new ArrayList<>())
+                Arguments.of(new ArrayList<>(), "Any", new ArrayList<>()),
+                Arguments.of(Arrays.asList("A", "B", "C"), "A", Arrays.asList("B", "C")),
+                Arguments.of(Arrays.asList("X", "Y", "Z"), "Z", Arrays.asList("X", "Y")),
+                Arguments.of(Arrays.asList("a", "b", "c", "a"), "a", Arrays.asList("b", "c")),
+                Arguments.of(Arrays.asList("One", "One", "One"), "One", new ArrayList<>()),
+                Arguments.of(Arrays.asList("A", "B"), "C", Arrays.asList("A", "B")),
+                Arguments.of(Arrays.asList("M", "N", "M", "N"), "M", Arrays.asList("N", "N"))
         );
     }
 

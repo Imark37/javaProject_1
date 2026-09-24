@@ -35,11 +35,9 @@ tasks.test {
     // --- ЗАДАЧА 1
     tasks.register<Test>("runTask1") {
         group = "other"
-
-        testClassesDirs = testSource.output.classesDirs
-        classpath = testSource.runtimeClasspath
+        testClassesDirs = tasks.test.get().testClassesDirs
+        classpath = tasks.test.get().classpath
         outputs.upToDateWhen { false }
-
         useJUnitPlatform {
             includeTags("task1")
         }
@@ -51,16 +49,13 @@ tasks.test {
     // --- ЗАДАЧА 2
     tasks.register<Test>("runTask2") {
         group = "other"
-
-        testClassesDirs = testSource.output.classesDirs
-        classpath = testSource.runtimeClasspath
+        testClassesDirs = tasks.test.get().testClassesDirs
+        classpath = tasks.test.get().classpath
         outputs.upToDateWhen { false }
-
-        useJUnitPlatform {
-            includeTags("task2")
-        }
+        useJUnitPlatform { includeTags("task2") }
         testLogging {
             showStandardStreams = true
+            events("passed", "skipped", "failed")
         }
     }
 
