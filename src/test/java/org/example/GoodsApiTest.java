@@ -119,7 +119,7 @@ class GoodsApiTest {
                 .isEqualTo(200);
 
         assertThat(response.jsonPath().getList("goods.name"))
-                .as("Список товаров должен содержать 'Хлеб'")
-                .contains("Хлеб");
+                .as("Список товаров должен содержать 'Петрушка'")
+                .contains("Петрушка");
     }
 }
